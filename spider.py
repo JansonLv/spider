@@ -29,7 +29,6 @@ class Spider(object):
         self.url_manager.add_new_url(start_url)
         # 如果还有url未爬取则不会停
         while self.url_manager.has_new_url():
-
             try:
                 # 获取url
                 new_url = self.url_manager.get_new_url()
