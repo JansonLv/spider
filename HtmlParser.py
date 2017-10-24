@@ -6,7 +6,10 @@
 @project:spider 
 """
 
-import re
+# import re
+import math
+from bs4 import BeautifulSoup
+import lxml
 
 class HtmlParser(object):
     def parser(self, page_url, html_content):
@@ -18,11 +21,13 @@ class HtmlParser(object):
         '''
         if page_url is None or not html_content:
             pass
-        new_urls = ''
-        new_data = ''
+        soup = BeautifulSoup(html_content, 'html.parser', from_encoding='utf-8')
+
+        new_urls = self._get_new_urls(page_url, soup)
+        new_data = self._get_new_data(page_url, soup)
         return new_urls, new_data
 
-    def _get_new_urls(self, page_url, html_content):
+    def _get_new_urls(self, page_url, soup):
         '''
         抽取新的url集合
         :param page_url: 下载页面的url???
@@ -33,9 +38,16 @@ class HtmlParser(object):
         '''
         抽取url地址
         '''
+        links = soup.select('body > div.body-wrapper > div.content-wrapper > div > div.main-content > div.lemma-summary > div > a')
+        # print(p)
+        for link in links:
+            url = link.get('href')
+            new_urls.add('https://baike.baidu.com' + url)
+
+
         return new_urls
 
-    def _get_new_data(self, page_url, html_content):
+    def _get_new_data(self, page_url, soup):
         '''
         抽取有效数据
         :param page_url: 下载页面的url
@@ -47,5 +59,14 @@ class HtmlParser(object):
         '''
         提取data数据
         '''
-        data['title'] = ''
+        title = soup.select('body > div.body-wrapper > div.content-wrapper > div > div.main-content > dl.lemmaWgt-lemmaTitle.lemmaWgt-lemmaTitle- > dd > h1')[0].get_text()
+
+
+        data['title'] = title
         return data
+'''
+
+    body > div.body-wrapper > div.content-wrapper > div > div.main-content > div.lemma-summary > div:nth-child(1) > a
+    body > div.body-wrapper > div.content-wrapper > div > div.main-content > div.lemma-summary > div:nth-child(2) > a:nth-child(1)
+    body > div.body - wrapper > div.content - wrapper > div > div.main - content > div.lemma - summary > div > a.xh - highlight
+'''

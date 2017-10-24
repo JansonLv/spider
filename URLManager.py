@@ -21,8 +21,8 @@ class UrlManager(object):
         :return:
         '''
         if self.new_urls_len():
-            print(self.new_urls)
-            print(self.new_urls_len())
+            # print(self.new_urls)
+            # print(self.new_urls_len())
             return True
         else:
             return False

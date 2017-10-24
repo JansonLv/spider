@@ -5,7 +5,8 @@
 @IDE: PyCharm
 @project:spider 
 """
-import codecs
+# import codecs
+
 class DataDeal(object):
     def __init__(self):
         self.datas = []
@@ -19,6 +20,11 @@ class DataDeal(object):
         if data is None:
             return
         self.datas.append(data)
+        if len(self.datas) == 10:
+            for data in self.datas:
+                print(data)
+            else:
+                self.datas = []
 
         # 调用,保存文件中
 
